@@ -409,8 +409,9 @@ int Scorealign::gen_chroma_midi(Alg_seq &seq, int hcutoff, int lcutoff,
     //set up the chrom_energy array;
     (*chrom_energy) = ALLOC(float, frame_count * (CHROMA_BIN_COUNT + 1));
     Event_list_ptr list = NULL;
-    seq.iteration_begin();
-    Alg_event_ptr event = seq.iteration_next();
+    Alg_iterator iterator(&seq, true);
+    iterator.begin();
+    Alg_event_ptr event = iterator.next();
     int cv_index;
     for (cv_index = 0; cv_index < frame_count; cv_index++) {
 		
@@ -428,7 +429,7 @@ int Scorealign::gen_chroma_midi(Alg_seq &seq, int hcutoff, int lcutoff,
             if (event->is_note()) {
                 list = new Event_list(event, list);
             }
-            event = seq.iteration_next();
+            event = iterator.next();
         }
         /* remove notes that are no longer sounding */
         Event_list_ptr *ptr = &list;
@@ -467,7 +468,7 @@ int Scorealign::gen_chroma_midi(Alg_seq &seq, int hcutoff, int lcutoff,
         list = list->next;
         delete temp;
     }
-    seq.iteration_end();
+    iterator.end();
     if (verbose)
         printf("\nGenerated Chroma. file%d_frames is %i\n", id, file1_frames);
     return frame_count;

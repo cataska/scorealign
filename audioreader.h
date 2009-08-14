@@ -1,3 +1,6 @@
+
+#include <stdlib.h>
+
 class Scorealign;
 
 class Audio_reader {

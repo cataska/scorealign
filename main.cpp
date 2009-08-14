@@ -94,9 +94,10 @@ void edit_transcription(Alg_seq &seq , bool warp, FILE *outf,
                         char *midi_filename, char *beat_filename) {
     int note_x = 1;
     seq.convert_to_seconds();
-    seq.iteration_begin();
+    Alg_iterator iterator(&seq, true);
+    iterator.begin();
 
-    Alg_event_ptr e = seq.iteration_next();
+    Alg_event_ptr e = iterator.next();
 
     while (e) {
         if (e->is_note()) {
@@ -112,9 +113,9 @@ void edit_transcription(Alg_seq &seq , bool warp, FILE *outf,
             }
             fprintf(outf, "%.3f %.3f\n", start, finish-start);
         }
-        e = seq.iteration_next();
+        e = iterator.next();
     }
-    seq.iteration_end();
+    iterator.end();
     fclose(outf);
     if (warp) {
         // align the midi file and write out 	
